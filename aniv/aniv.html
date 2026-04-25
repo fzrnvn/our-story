@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Story ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=0,400;0,600;1,400&family=Lora:ital,wght@0,400;1,400&display=swap');
+
+        :root {
+            --bg-color: #080808;
+            --text-color: #f0f0f0;
+            --accent-color: #ffb6c1; 
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Lora', serif; 
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .highlight-text {
+            font-family: 'Playfair Display', serif; 
+            font-weight: 600;
+        }
+
+        .hidden-initial { display: none !important; }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* --- STYLING HALAMAN LOGIN --- */
+        #login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: opacity 1s ease;
+        }
+
+        /* --- Latar Belakang Gambar di Login (image_9.png) --- */
+        #login-screen::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('image_9.png'); 
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.3) blur(2px); 
+            z-index: -1;
+        }
+
+        .login-box {
+            background: rgba(10, 10, 10, 0.85); 
+            padding: 3rem 2.5rem;
+            border-radius: 25px;
+            border: 1px solid var(--accent-color);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .login-box h1 {
+            color: var(--accent-color);
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .login-box p.subtitle {
+            font-style: italic;
+            color: #ccc;
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px 10px;
+            margin-bottom: 1.5rem;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--accent-color);
+            color: var(--text-color);
+            font-family: 'Lora', serif;
+            font-size: 1.1rem;
+            outline: none;
+            text-align: center;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .login-box input:focus {
+            border-bottom: 2px solid var(--accent-color);
+            box-shadow: 0 5px 15px -10px var(--accent-color);
+        }
+
+        .login-box input::placeholder {
+            color: rgba(240, 240, 240, 0.4);
+            font-style: italic;
+        }
+
+        #login-error {
+            color: #ff6b6b;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            font-style: italic;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* --- STYLING TOMBOL LOGIN --- */
+        #login-box-btn {
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 12px 35px;
+            font-family: 'Lora', serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.4s ease;
+            width: 100%;
+            max-width: 250px;
+            margin-top: 1rem;
+        }
+
+        #login-box-btn:hover:not(:disabled) {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            box-shadow: 0 0 15px rgba(255, 182, 193, 0.5);
+        }
+
+        #login-box-btn:disabled {
+            border-color: #555;
+            color: #555;
+            cursor: not-allowed;
+        }
+
+        /* --- STYLING HALAMAN OPENING --- */
+        #opening {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--bg-color);
+            z-index: 100;
+            opacity: 0; 
+            transition: opacity 1.5s ease;
+        }
+
+        #opening h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+        }
+
+        button.start-btn {
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 12px 35px;
+            font-family: 'Lora', serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.4s ease;
+            width: 100%;
+            max-width: 250px;
+        }
+
+        button.start-btn:hover:not(:disabled) {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            box-shadow: 0 0 15px rgba(255, 182, 193, 0.5);
+        }
+
+        button.start-btn:disabled {
+            border-color: #555;
+            color: #555;
+            cursor: not-allowed;
+        }
+
+        /* --- STYLING TIMELINE --- */
+        .chapter { max-width: 800px; margin: 0 auto; }
+
+        .chapter-date {
+            color: var(--accent-color);
+            font-size: 1rem;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .chapter h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .chapter p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+            color: #dcdcdc;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .img-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+        }
+
+        .img-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 20px;
+            transition: transform 0.8s ease;
+            filter: brightness(0.9);
+        }
+
+        .img-container:hover img {
+            transform: scale(1.03);
+            filter: brightness(1);
+        }
+
+        /* --- STYLING GRID UNTUK FOTO BERSEBELAHAN --- */
+        .chapter-grid {
+            display: flex;
+            gap: 1.5rem; 
+            justify-content: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap; 
+        }
+
+        .chapter-grid .img-container {
+            flex: 1 1 calc(50% - 1rem); 
+            max-width: none; 
+            margin: 0;
+        }
+
+        #highlight {
+            background: radial-gradient(circle, rgba(255, 182, 193, 0.08) 0%, rgba(8,8,8,1) 70%);
+        }
+
+        .highlight-text {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            text-shadow: 0 0 20px rgba(255, 182, 193, 0.3);
+        }
+
+        #ending h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        #ending p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            section { padding: 3rem 1.5rem; }
+            .login-box { padding: 2.5rem 1.5rem; }
+            
+            /* Pada layar ponsel kecil, foto akan bertumpuk secara vertikal */
+            .chapter-grid .img-container {
+                flex: 1 1 100%; 
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div style="position: absolute; width: 0; height: 0; overflow: hidden; z-index: -999;">
+        <div id="youtube-player"></div>
+    </div>
+
+    <section id="login-screen">
+        <div class="login-box fade-up visible">
+            <h1>Selamat Datang, reaaa ❤️</h1>
+            <p class="subtitle">Masukkan kunci untuk membuka cerita kita.</p>
+            <form id="login-form">
+                <input type="text" id="username" placeholder="Siapa namamu?" autocomplete="off" required>
+                <input type="password" id="password" placeholder="Tanggal jadian?" required>
+                <button type="submit" id="login-box-btn">Buka Kenangan</button>
+                <p id="login-error">ID atau Password salah, coba lagi ya ❤️</p>
+            </form>
+        </div>
+    </section>
+
+    <section id="opening" class="hidden-initial">
+        <h1>This is our story ❤️</h1>
+        <button id="start-btn" class="start-btn" disabled>Menyiapkan Lagu...</button>
+    </section>
+
+    <div id="main-content" class="hidden-initial">
+        
+        <section class="chapter">
+            <div class="fade-up">
+                <div class="chapter-date">April 2026</div>
+                <h2>Merekam Kenangan</h2>
+                <p>Malam itu di Solo, layaknya sebuah jurnal, aku ingin menyimpan setiap senyum, cerita, dan momen kecil kita dengan rapi. "Every possibility begins with the courage to imagine." Dan aku membayangkan masa depan bersamamu.</p>
+                <div class="img-container">
+                    <img src="image_9.png" alt="Kolase Kenangan Jurnal">
+                </div>
+            </div>
+        </section>
+
+        <section class="chapter">
+            <div class="fade-up">
+                <div class="chapter-date">Mei 2026</div>
+                <h2>Persahabatan Unik</h2>
+                
+                <div class="chapter-grid">
+                    <div class="img-container">
+                        <img src="image_0.png" alt="Menyuapi Rusa">
+                    </div>
+                    <div class="img-container">
+                        <img src="image_1.png" alt="Melihat Rusa">
+                    </div>
+                </div>
+
+                <p>
+                    Setiap perjalanan kita selalu penuh cerita tak terduga. Seperti sore itu ketika kita bertemu teman-teman baru yang menggemaskan. Senyummu saat berbagi makanan dengan mereka adalah momen yang paling menenangkan hati.
+                </p>
+            </div>
+        </section>
+
+        <section class="chapter">
+            <div class="fade-up">
+                <div class="chapter-date">Tawa & Canda</div>
+                <h2>Tingkah Konyol Kita</h2>
+                <p>Di antara semua pose bagus, foto-foto konyol seperti inilah yang selalu berhasil membuatku tersenyum. Kamu yang selalu bisa mencairkan suasana dengan caramu sendiri.</p>
+                <div class="img-container">
+                    <img src="image_6.png" alt="Photobooth Senyum Konyol">
+                </div>
+            </div>
+        </section>
+
+        <section class="chapter">
+            <div class="fade-up">
+                <div class="chapter-date">Malam Spesial</div>
+                <h2>Terang Malam Bersamamu</h2>
+                
+                <div class="chapter-grid">
+                    <div class="img-container">
+                        <img src="WhatsApp Image 2026-04-24 at 1.53.08 PM.jpeg" alt="Pose Konyol Malam Hari 1">
+                    </div>
+                    <div class="img-container">
+                        <img src="WhatsApp Image 2026-04-24 at 1.53.08 PM (2).jpeg" alt="Pose Konyol Malam Hari 2">
+                    </div>
+                </div>
+
+                <p>
+                    Jalan-jalan malam menikmati keramaian kota dengan baju yang senada. Walau di tengah banyak orang, fokusku rasanya cuma ke kamu. Tetap jadi partner konyolku selamanya ya!
+                </p>
+            </div>
+        </section>
+        <section id="highlight">
+            <div class="fade-up">
+                <div class="highlight-text">"All of me loves all of you"</div>
+                <p style="font-size: 1.25rem; color: #fff; max-width: 600px; margin: 0 auto; font-style: italic;">
+                    Setiap detik yang terekam, setiap jepretan kamera, adalah bukti bahwa kebersamaan kita adalah hal terbaik yang pernah terjadi.
+                </p>
+            </div>
+        </section>
+
+        <section class="chapter">
+            <div class="fade-up">
+                <div class="chapter-date">Menikmati Waktu</div>
+                <h2>Keliling Kota Berdua</h2>
+                <p>Menembus kemacetan, menikmati angin malam, dan melihat lampu jalanan. Hal-hal sederhana yang terasa begitu istimewa karena dilewati bersamamu.</p>
+                <div class="img-container">
+                    <img src="image_7.png" alt="Motor POV Solo">
+                </div>
+            </div>
+        </section>
+
+        <section id="ending">
+            <div class="fade-up">
+                <h1>Happy Anniversary ❤️</h1>
+                <p>Terima kasih sudah bertahan sejauh ini. Terima kasih untuk sabarnya, untuk kasih sayangnya, dan untuk selalu menjadi rumah tempatku pulang. Mari membuat lebih banyak memori indah di masa depan.</p>
+                <br>
+                <p style="font-style: italic; color: var(--accent-color);">Aku sayang kamu.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <script>
+        // --- LOGIKA LOGIN ---
+        const loginScreen = document.getElementById('login-screen');
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+        const openingScreen = document.getElementById('opening');
+        const mainContent = document.getElementById('main-content');
+        
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            
+            const user = document.getElementById('username').value.toLowerCase();
+            const pass = document.getElementById('password').value;
+
+            // Cek ID dan Password
+            if (user === 'reaaa' && pass === '010426') {
+                loginError.style.opacity = '0';
+                loginScreen.style.opacity = '0'; 
+                
+                setTimeout(() => {
+                    loginScreen.style.display = 'none'; 
+                    openingScreen.classList.remove('hidden-initial'); 
+                    
+                    setTimeout(() => {
+                        openingScreen.style.opacity = '1'; 
+                    }, 50);
+                }, 1000);
+            } else {
+                loginError.style.opacity = '1';
+                loginForm.style.transform = 'translateX(-10px)';
+                setTimeout(() => loginForm.style.transform = 'translateX(10px)', 100);
+                setTimeout(() => loginForm.style.transform = 'translateX(0)', 200);
+            }
+        });
+
+        // --- LOGIKA YOUTUBE & TIMELINE ---
+        const startBtn = document.getElementById('start-btn');
+        let player;
+        
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '1',
+                width: '1',
+                videoId: 'QfgJQUiQFes', 
+                playerVars: {
+                    'autoplay': 1, 
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'QfgJQUiQFes' 
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.playVideo();
+            startBtn.innerText = "Mulai Perjalanan"; 
+            startBtn.disabled = false; 
+        }
+
+        document.body.addEventListener('click', function() {
+            if (player && typeof player.playVideo === 'function' && player.getPlayerState() !== YT.PlayerState.PLAYING) {
+                player.playVideo();
+            }
+        }, { once: true }); 
+
+        document.body.addEventListener('touchstart', function() {
+            if (player && typeof player.playVideo === 'function' && player.getPlayerState() !== YT.PlayerState.PLAYING) {
+                player.playVideo();
+            }
+        }, { once: true });
+
+        startBtn.addEventListener('click', () => {
+            if(player && player.getPlayerState() !== YT.PlayerState.PLAYING){
+                player.playVideo(); 
+            }
+
+            openingScreen.style.opacity = '0'; 
+            
+            setTimeout(() => {
+                openingScreen.style.display = 'none'; 
+                mainContent.classList.remove('hidden-initial'); 
+                window.scrollTo(0, 0); 
+                initTimelineObserver(); 
+            }, 1500); 
+        });
+
+        // --- LOGIKA ANIMASI SCROLL (Intersection Observer) ---
+        function initTimelineObserver() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.25 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-up').forEach((el) => {
+                observer.observe(el);
+            });
+        }
+    </script>
+</body>
+</html>
